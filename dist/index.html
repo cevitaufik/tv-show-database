@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TVSDb</title>
+  </head>
+  <body class="bg-secondary bg-opacity-10">
+    <div class="bg-primary">
+      <div class="mb-5 p-5 text-white">
+        <h1 class="fw-bold my-3">TV Show Database</h1>
+        <h2>Millions of TV shows and people to discover. Explore now.</h2>
+      </div>
+    </div>
+
+    <div class="container py-3 px-3 mx-auto bg-white rounded">
+      <div class="d-flex my-2">
+        <nav class="m-auto">
+          <ul class="pagination">
+            <li class="page-item">
+              <button class="page-link" id="previous">Previous</button>
+            </li>
+            <li class="page-item">
+              <button class="page-link" data-page="1">1</button>
+            </li>
+            <li class="page-item">
+              <button class="page-link" data-page="2">2</button>
+            </li>
+            <li class="page-item">
+              <button class="page-link" data-page="3">3</button>
+            </li>
+            <li class="page-item">
+              <button class="page-link" data-page="4">4</button>
+            </li>
+            <li class="page-item">
+              <button class="page-link" data-page="5">5</button>
+            </li>
+            <li class="page-item">
+              <button class="page-link" id="next">Next</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="row row-cols-1 row-cols-md-3 g-4" id="row"></div>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>
