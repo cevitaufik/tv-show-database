@@ -6,7 +6,6 @@ import './pagination.js'
 import { Api } from './api.js'
 
 const api = new Api()
-console.log(api.url())
 
 window.addEventListener('DOMContentLoaded', () => {
   fetch(api.url(), {
@@ -17,7 +16,6 @@ window.addEventListener('DOMContentLoaded', () => {
   })
     .then(response => response.json())
     .then(response => {
-      console.log(response)
       if (api.showById()) {
         updateCard(response)
       } else {
@@ -26,15 +24,14 @@ window.addEventListener('DOMContentLoaded', () => {
         })
       }
 
-      updatePagination(response.page)
-      updatePaginationStyle(response.page)
+      pageButton(response.page, response.total_pages)
     })
 })
 
-function updatePagination (pageNumber) {
+function pageButton (current, total) {
   const page = document.createElement('my-pagination')
-  page.page = pageNumber
-  page.params = api.params
+  page.prev = api.previousPage()
+  page.next = (current !== total) ? api.nextPage() : null
 
   document.getElementById('paginate').appendChild(page)
 }
@@ -46,40 +43,6 @@ function updateCard (data) {
   document.getElementById('row').appendChild(card)
 }
 
-function updatePaginationStyle (page) {
-  removeActiveClass()
-
-  if (page === 1) {
-    document.querySelector('a[id="previous"]').classList.add('disabled')
-  }
-
-  if (page - 3 >= 1) {
-    const element = document.querySelector('a[data-page-midle="1"]').parentElement
-
-    element.innerHTML = createPageButton(page + 1)
-    element.nextElementSibling.innerHTML = createPageButton(page + 2)
-
-    element.previousElementSibling.innerHTML = createPageButton(page)
-    element.previousElementSibling.previousElementSibling.innerHTML = createPageButton(page - 1)
-  }
-
-  document.querySelector(`a[data-page="${page}"]`).parentElement.classList.add('active')
-  document.getElementById('previous').setAttribute('href', `?page=${page - 1}`)
-  document.getElementById('next').setAttribute('href', `?page=${page + 1}`)
-}
-
-function createPageButton (number) {
-  console.log('tes')
-  return `<a href="?page=${number}" class="page-link" data-page="${number}">${number}</a>`
-}
-
-function removeActiveClass () {
-  const elements = document.querySelectorAll('.page-item.active')
-
-  if (elements.length) {
-    elements.forEach(el => {
-      el.classList.remove('active')
-      console.log(el)
-    })
-  }
+if (api.query) {
+  document.getElementById('query').value = api.query
 }

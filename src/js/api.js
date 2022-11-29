@@ -3,7 +3,9 @@ export class Api {
     this.base = 'https://api.themoviedb.org/3'
     this.auth = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjY2NDM2NmVlYTI1MjMwZTk0NjA0YzViYzBiMjVkNSIsInN1YiI6IjYzN2UwN2U1ZmU2MzE4MDBjZTQ4ZjU0YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DTzZE4fhKUWm1sh7fgdCWGB67xx2LUNRZdeKxTcSyF8'
     this.urlString = new URL(window.location)
-    this.params = this.urlString.search
+    this.params = new URLSearchParams(this.urlString.search)
+    this.currentPage = parseInt(this.params.get('page'))
+    this.query = this.params.get('query')
   }
 
   url () {
@@ -15,7 +17,7 @@ export class Api {
 
     if (this.showById()) return this.showById()
 
-    if (this.query()) return this.query()
+    if (this.hasQuery()) return this.hasQuery()
   }
 
   discover () {
@@ -23,32 +25,42 @@ export class Api {
   }
 
   showById () {
-    const id = this.urlString.searchParams.get('id')
+    const id = this.params.get('id')
 
-    if (id) {
-      return this.base + '/tv/' + id
-    }
-
-    return false
+    return (id) ? this.base + '/tv/' + id : false
   }
 
-  query () {
-    const query = this.urlString.searchParams.get('query')
-
-    if (query) {
-      return this.base + '/search/tv?query=' + query
-    }
-
-    return false
+  hasQuery () {
+    return (this.query) ? this.base + '/search/tv?query=' + this.query : false
   }
 
   page () {
-    const page = this.urlString.searchParams.get('page')
+    return (this.currentPage) ? this.discover() + '?page=' + this.currentPage : false
+  }
 
-    if (page) {
-      return this.discover() + '?page=' + page
+  nextPage () {
+    if (this.currentPage) {
+      this.params.set('page', this.currentPage + 1)
+
+      return this.toQueryString()
+    }
+
+    this.params.set('page', 2)
+
+    return this.toQueryString()
+  }
+
+  previousPage () {
+    if (this.currentPage && this.currentPage > 1) {
+      this.params.set('page', this.currentPage - 1)
+
+      return this.toQueryString()
     }
 
     return false
+  }
+
+  toQueryString () {
+    return '?' + this.params.toString()
   }
 }

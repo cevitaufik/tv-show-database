@@ -1,3 +1,6 @@
+const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+
 const path = require('path')
 
 module.exports = {
@@ -37,8 +40,26 @@ module.exports = {
             loader: 'sass-loader'
           }
         ]
+      },
+      {
+        test: /\.html$/i,
+        type: 'asset/resource'
       }
     ]
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          context: path.resolve(__dirname, 'src'),
+          from: './*.html'
+        }
+      ]
+    })
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [new HtmlMinimizerPlugin()]
   },
   performance: {
     hints: false
