@@ -1,5 +1,6 @@
 const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const path = require('path')
 
@@ -59,7 +60,32 @@ module.exports = {
   ],
   optimization: {
     minimize: true,
-    minimizer: [new HtmlMinimizerPlugin()]
+    minimizer: [
+      new HtmlMinimizerPlugin(),
+      new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+        terserOptions: {
+          ecma: undefined,
+          parse: {},
+          compress: {
+            drop_console: true
+          },
+          mangle: true,
+          module: false,
+          output: null,
+          format: {
+            comments: false
+          },
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_classnames: undefined,
+          keep_fnames: false,
+          safari10: false
+        },
+        extractComments: false
+      })
+    ]
   },
   performance: {
     hints: false
