@@ -51,6 +51,6 @@ export class Api {
   }
 
   toQueryString () {
-    return '?' + this.params.toString()
+    return `?${this.params.toString()}`
   }
 }
