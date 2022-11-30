@@ -9,33 +9,23 @@ export class Api {
   }
 
   url () {
-    if (!this.urlString.search) {
-      return this.discover()
-    }
+    if (!this.urlString.search) return this.discover()
 
     if (this.page()) return this.page()
-
-    if (this.showById()) return this.showById()
 
     if (this.hasQuery()) return this.hasQuery()
   }
 
   discover () {
-    return this.base + '/discover/tv'
-  }
-
-  showById () {
-    const id = this.params.get('id')
-
-    return (id) ? this.base + '/tv/' + id : false
+    return `${this.base}/discover/tv`
   }
 
   hasQuery () {
-    return (this.query) ? this.base + '/search/tv?query=' + this.query : false
+    return (this.query) ? `${this.base}/search/tv?query=${this.query}` : false
   }
 
   page () {
-    return (this.currentPage) ? this.discover() + '?page=' + this.currentPage : false
+    return (this.currentPage) ? `${this.discover()}?page=${this.currentPage}` : false
   }
 
   nextPage () {

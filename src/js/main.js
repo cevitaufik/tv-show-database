@@ -16,19 +16,13 @@ window.addEventListener('DOMContentLoaded', () => {
   })
     .then(response => response.json())
     .then(response => {
-      if (api.showById()) {
-        updateCard(response)
-      } else {
-        response.results.forEach(res => {
-          updateCard(res)
-        })
-      }
+      response.results.forEach(res => updateCard(res))
 
       pageButton(response.page, response.total_pages)
     })
 })
 
-function pageButton (current, total) {
+const pageButton = (current, total) => {
   const page = document.createElement('my-pagination')
   page.prev = api.previousPage()
   page.next = (current !== total) ? api.nextPage() : null
@@ -36,13 +30,11 @@ function pageButton (current, total) {
   document.getElementById('paginate').appendChild(page)
 }
 
-function updateCard (data) {
+const updateCard = data => {
   const card = document.createElement('my-card')
   card.show = data
 
   document.getElementById('row').appendChild(card)
 }
 
-if (api.query) {
-  document.getElementById('query').value = api.query
-}
+if (api.query) document.getElementById('query').value = api.query
